@@ -25,4 +25,20 @@ First you need to activate the preprocessing environment:
 conda activate ph290e_preproc
 ```
 
+Then run the preprocessing script to generate the jet images and save them in `hdf5` format for training:
+```bash
+# for background sample
+python ph290e-autoencoders/preprocessing.py ${CFS}/atlas/kkrizka/E290/samples/v0.0.1/dijet/run_01_*/tag_1_delphes_events.root
+# for signal sample
+python ph290e-autoencoders/preprocessing.py ${CFS}/atlas/kkrizka/E290/samples/v0.0.1/ttbar/run_02_*/tag_1_delphes_events.root
+```
+
+This will generate the files `background.hdf5` (containing info about the background jets) and `signal.hdf5` (containing info about the signal jets) inside the folder `preprocessed_samples`.
+
+To generate plots of the input features for background and signal (e.g. jet images, $\tau_32$ variable), run the plotting script:
+```bash
+python ph290e-autoencoders/plot_inputs.py
+```
+This will generate and store the plots in the folder `input_plots`.
+
 ## Training step
