@@ -38,7 +38,7 @@ f_sig.close()
 f_bkg.close()
 
 ## ROC curve for cut on tau_32 variables
-print("Generation plot of ROC curve")
+print("Generating plot of ROC curve")
 tau_cuts = np.linspace(0, 1, 101)
 sig_eff, bkg_eff = evalh.roc_curve(sig_tau_32, bkg_tau_32, thresholds=tau_cuts, cut_type="lower")
 ploth.plot_roc_curve([(sig_eff, bkg_eff)], [r"$\tau_{32}$"], "roc_tau_32.pdf", outDir=plotDir)
