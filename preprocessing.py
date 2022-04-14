@@ -32,8 +32,10 @@ else:
 
 tau_2_arr = np.empty(nJets)
 tau_3_arr = np.empty(nJets)
+jet_mass = np.empty(nJets)
 jet_images_orig = np.empty((nJets, 50, 50))
 jet_images_preproc = np.empty((nJets, 50, 50))
+jet_images_proc_norm = np.empty((nJets, 50, 50))
 
 # Loop the loop
 nJets = 0
@@ -52,6 +54,9 @@ for e in t:
         # tau_2, tau_3 variables for baseline performance
         tau_2_arr[nJets] = fj.Tau[1]
         tau_3_arr[nJets] = fj.Tau[2]
+        
+        # jet mass
+        jet_mass[nJets] = fj.Mass
         
         # for storing the jet images
         eta_arr = []
@@ -85,6 +90,7 @@ for e in t:
         eta_flip, phi_flip = pph.flip(eta_rot, phi_rot, flip)
         jet_img_proc = pph.pixelize(eta_flip, phi_flip, et_arr)
         jet_images_preproc[nJets] = jet_img_proc
+        jet_images_proc_norm[nJets] = pph.normalize(jet_img_proc)
         
         nJets += 1
         break # Leading jet only
@@ -97,8 +103,10 @@ outFile = "signal.hdf5" if select_ttbar else "background.hdf5"
 outPath = os.path.join(outDir, outFile)
 
 f1 = h5py.File(outPath, "w")
-dset1 = f1.create_dataset("tau_2", tau_2_arr.shape, dtype="f", data=tau_2_arr)
-dset2 = f1.create_dataset("tau_3", tau_3_arr.shape, dtype="f", data=tau_3_arr)
-dset3 = f1.create_dataset("jet_images_original", jet_images_orig.shape, dtype="f", data=jet_images_orig)
-dset4 = f1.create_dataset("jet_images_preprocessed", jet_images_preproc.shape, dtype="f", data=jet_images_preproc)
+f1.create_dataset("tau_2", tau_2_arr.shape, dtype="f", data=tau_2_arr)
+f1.create_dataset("tau_3", tau_3_arr.shape, dtype="f", data=tau_3_arr)
+f1.create_dataset("jet_images_original", jet_images_orig.shape, dtype="f", data=jet_images_orig)
+f1.create_dataset("jet_images_preprocessed", jet_images_preproc.shape, dtype="f", data=jet_images_preproc)
+f1.create_dataset("jet_images_proc_normalized", jet_images_proc_norm.shape, dtype="f", data=jet_images_proc_norm)
+f1.create_dataset("jet_mass", jet_mass.shape, dtype="f", data=jet_mass)
 f1.close()
