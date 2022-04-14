@@ -4,7 +4,7 @@
 
 To setup a conda environment with the packages needed to open the sample files and generate the jet images inputs for training:
 ```bash
-conda create -n ph290e_preproc -c conda-forge root=6.26.0 python=3.10.4 scipy=1.8.0 h5py=3.6.0 matplotlib=3.5.1
+conda create -n ph290e_preproc -c conda-forge root=6.26.0 python=3.10.4 scipy=1.8.0 h5py=3.6.0 matplotlib=3.5.1 scikit-learn=1.0.2
 conda activate ph290e_preproc
 conda install ${CFS}/atlas/kkrizka/E290/delphes-3.5.0-0.tar.bz2
 ```
