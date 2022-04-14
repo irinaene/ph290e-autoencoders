@@ -68,7 +68,10 @@ def determine_flip(x, y, w):
     return flip_types[0]
 
 def normalize(x):
-    return x / np.sum(x)
+    total = np.sum(x)
+    if total == 0:
+        total = 1
+    return x / total
 
 def pixelize(x, y, vals):
     nPix = 50
