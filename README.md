@@ -11,6 +11,12 @@ conda install ${CFS}/atlas/kkrizka/E290/delphes-3.5.0-0.tar.bz2
 
 ## Training setup
 
+To setup a conda environment for training the autoencoder model:
+```bash
+conda create -n ph290e_train -c conda-forge tensorflow=2.7.0 python=3.10.4 h5py=3.6.0 matplotlib=3.5.1
+conda activate ph290e_train
+```
+
 # Running the code
 
 Get a copy of the code:
