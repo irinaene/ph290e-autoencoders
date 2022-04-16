@@ -82,4 +82,18 @@ def plot_roc_curve(eff_pairs, labels, plotName, outDir=None):
             os.mkdir(outDir)
     outPath = os.path.join(outDir, plotName)
     fig.savefig(outPath)
+
+def plot_training_loss(history, plotName="training_loss_plot.pdf", outDir=None):
+    fig = plt.figure(figsize=(8, 6))
+    epochs = np.arange(1, len(history["loss"] + 1))
+    plt.plot(history.history['loss'], label='loss')
+    plt.plot(history.history['val_loss'], label = 'val_loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.legend(loc='best')
     
+    if outDir:
+        if not os.path.isdir(outDir):
+            os.mkdir(outDir)
+    outPath = os.path.join(outDir, plotName)
+    fig.savefig(outPath)
