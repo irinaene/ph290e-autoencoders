@@ -73,8 +73,7 @@ def normalize(x):
         total = 1
     return x / total
 
-def pixelize(x, y, vals):
-    nPix = 50
+def pixelize(x, y, vals, nPix=40):
     pix_bins = np.linspace(-1, 1, nPix + 1)
     vals_pix, _, _ = np.histogram2d(x, y, bins=pix_bins, weights=vals)
     

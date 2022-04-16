@@ -33,9 +33,10 @@ else:
 tau_2_arr = np.empty(nJets)
 tau_3_arr = np.empty(nJets)
 jet_mass = np.empty(nJets)
-jet_images_orig = np.empty((nJets, 50, 50))
-jet_images_preproc = np.empty((nJets, 50, 50))
-jet_images_proc_norm = np.empty((nJets, 50, 50))
+nPix = 40
+jet_images_orig = np.empty((nJets, nPix, nPix))
+jet_images_preproc = np.empty((nJets, nPix, nPix))
+jet_images_proc_norm = np.empty((nJets, nPix, nPix))
 
 # Loop the loop
 nJets = 0
@@ -81,14 +82,14 @@ for e in t:
         
         # original jet images -- only centered and pixelated
         eta_cent, phi_cent = pph.center(eta_arr, phi_arr, et_arr)
-        jet_img = pph.pixelize(eta_cent, phi_cent, et_arr)
+        jet_img = pph.pixelize(eta_cent, phi_cent, et_arr, nPix=nPix)
         jet_images_orig[nJets] = jet_img
         
         # fully pre-processed jet images
         eta_rot, phi_rot = pph.rotate_princ_vertical(eta_cent, phi_cent, et_arr)
         flip = pph.determine_flip(eta_rot, phi_rot, et_arr)
         eta_flip, phi_flip = pph.flip(eta_rot, phi_rot, flip)
-        jet_img_proc = pph.pixelize(eta_flip, phi_flip, et_arr)
+        jet_img_proc = pph.pixelize(eta_flip, phi_flip, et_arr, nPix=nPix)
         jet_images_preproc[nJets] = jet_img_proc
         jet_images_proc_norm[nJets] = pph.normalize(jet_img_proc)
         
