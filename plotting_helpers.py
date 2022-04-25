@@ -62,7 +62,7 @@ def plot_tau_32(sig_tau, bkg_tau, sig_label=None, bkg_label=None, outDir=None):
     outPath = os.path.join(outDir, "tau_32_comparison.pdf")
     fig.savefig(outPath)
 
-def plot_roc_curve(eff_pairs, labels, plotName, outDir=None):
+def plot_roc_curve(eff_pairs, labels, plotName, outDir=None, grid=False):
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(1, 1, 1)
     
@@ -75,6 +75,7 @@ def plot_roc_curve(eff_pairs, labels, plotName, outDir=None):
     ax.set_xlim([-0.01, 1.01])
     ax.set_ylabel(r"Background rejection ($1/\epsilon_b$)", fontsize=15)
     ax.set_yscale("log")
+    ax.grid(grid, which="both")
     
     plt.tight_layout()
     if outDir:
@@ -83,15 +84,80 @@ def plot_roc_curve(eff_pairs, labels, plotName, outDir=None):
     outPath = os.path.join(outDir, plotName)
     fig.savefig(outPath)
 
-def plot_training_loss(history, plotName="training_loss_plot.pdf", outDir=None):
+def plot_training_loss(history, plotName="training_loss_plot.pdf", outDir=None, valid=True):
     fig = plt.figure(figsize=(8, 6))
-    epochs = np.arange(1, len(history["loss"] + 1))
+    epochs = np.arange(1, len(history.history["loss"]) + 1)
     plt.plot(history.history['loss'], label='loss')
-    plt.plot(history.history['val_loss'], label = 'val_loss')
+    if valid:
+        plt.plot(history.history['val_loss'], label = 'val_loss')
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.legend(loc='best')
     
+    plt.tight_layout()
+    if outDir:
+        if not os.path.isdir(outDir):
+            os.mkdir(outDir)
+    outPath = os.path.join(outDir, plotName)
+    fig.savefig(outPath)
+
+def plot_loss_vs_encoding_dim(encoding_dims, avg_loss, plotName="avg_training_loss_vs_encoding_dim.pdf", outDir=None):
+    fig = plt.figure(figsize=(8, 6))
+    plt.plot(encoding_dims, avg_loss, label="CNN")
+    plt.scatter(encoding_dims, avg_loss)
+
+    plt.xlim([0, 33])
+    plt.xlabel('Encoding Dimensions')
+    plt.ylabel(r'Loss x $10^6$')
+    plt.legend(loc='best')
+    
+    plt.tight_layout()
+    if outDir:
+        if not os.path.isdir(outDir):
+            os.mkdir(outDir)
+    outPath = os.path.join(outDir, plotName)
+    fig.savefig(outPath)
+
+def plot_reconstruction_error(error_list, label_list, plotName="mean_reconstruction_error.pdf", outDir=None):
+    assert len(error_list) == len(label_list)
+
+    fig = plt.figure(figsize=(8, 6))
+    ax = fig.add_subplot(1, 1, 1)
+
+    bin_min = 1e-7
+    bin_max = 1e-3
+    for arr in error_list:
+        if np.min(arr) < bin_min: bin_min = np.min(arr)
+        if np.max(arr) > bin_max: bin_max = np.max(arr)
+
+    logbins = np.logspace(np.log10(bin_min), np.log10(bin_max), 25)
+    for i in range(len(error_list)):
+        weights = np.ones(len(error_list[i])) * 1. / len(error_list[i])
+        ax.hist(error_list[i], bins=logbins, weights=weights, label=label_list[i], histtype="stepfilled", alpha=0.35)
+
+    ax.set_xlabel("Reconstruction error")
+    ax.set_xscale("log")
+    ax.set_ylabel("A.U.")
+    ax.legend(loc="upper left")
+    
+    plt.tight_layout()
+    if outDir:
+        if not os.path.isdir(outDir):
+            os.mkdir(outDir)
+    outPath = os.path.join(outDir, plotName)
+    fig.savefig(outPath)
+
+def plot_mass_vs_reco_err(reco_err, avg_jet_mass, plotName="jet_mass_vs_reco_err.pdf", outDir=None):
+    fig = plt.figure(figsize=(8, 6))
+    ax = fig.add_subplot(1, 1, 1)
+
+    plt.plot(reco_err * 1e6, avg_jet_mass)
+    # plt.hist(avg_jet_mass, bins="auto")
+
+    ax.set_xlabel(r"Reconstruction error x $10^6$")
+    ax.set_ylabel("Average jet mass [GeV]")
+    
+    plt.tight_layout()
     if outDir:
         if not os.path.isdir(outDir):
             os.mkdir(outDir)
