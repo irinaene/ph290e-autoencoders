@@ -6,6 +6,7 @@ from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense,
 from tensorflow.keras import Model
 from tensorflow.keras.losses import mean_squared_error
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, CSVLogger
 from tensorflow import keras
 
 
@@ -61,8 +62,9 @@ def train_encoding_dim_search(train_data, nPix, encoding_dim, nEpochs, batch_siz
 
 def train_autoencoder_model(train_data, valid_data, nPix, encoding_dim, nEpochs, batch_size, logDir, trial=0, patience=3):
     print(f"\nRunning training for encoding dim {encoding_dim} -- iteration {trial + 1}")
-    # create the autoencoder model
+    
     autoencoder_model = create_autoencoder_model((nPix, nPix), encoding_dim=encoding_dim)
+    autoencoder_model.summary()
 
     # callbacks
     early_stopping_callback = EarlyStopping(monitor="val_loss", patience=patience, verbose=1)

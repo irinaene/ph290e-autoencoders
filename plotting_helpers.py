@@ -18,12 +18,12 @@ mpl.rcParams["font.size"] = 12
 mpl.rcParams["legend.fontsize"] = 15
 mpl.rcParams["savefig.dpi"] = 300
 
-def plot_avg_jet_image(jet_imgs_array, sampleName, nJets=1, suffix=None, outDir=None):
+def plot_avg_jet_image(jet_imgs_array, sampleName, nJets=1, suffix=None, outDir=None, vmin=None, vmax=None, cmap="viridis"):
     jet_img = np.average(jet_imgs_array[:nJets, :, :], axis=0)
     
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(1, 1, 1, aspect="equal")
-    pc = ax.imshow(jet_img.T, extent=(-1, 1, -1, 1), origin="lower", norm=mpl.colors.LogNorm())
+    pc = ax.imshow(jet_img.T, extent=(-1, 1, -1, 1), origin="lower", norm=mpl.colors.LogNorm(vmin=vmin, vmax=vmax), cmap=cmap)
     ax.set_ylabel("$\phi$'")
     ax.set_xlabel("$\eta$'")
     
@@ -87,11 +87,33 @@ def plot_roc_curve(eff_pairs, labels, plotName, outDir=None, grid=False):
 def plot_training_loss(history, plotName="training_loss_plot.pdf", outDir=None, valid=True):
     fig = plt.figure(figsize=(8, 6))
     epochs = np.arange(1, len(history.history["loss"]) + 1)
-    plt.plot(history.history['loss'], label='loss')
+    plt.plot(epochs, history.history['loss'], label='loss')
     if valid:
-        plt.plot(history.history['val_loss'], label = 'val_loss')
+        plt.plot(epochs, history.history['val_loss'], label = 'val_loss')
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
+    plt.legend(loc='best')
+    
+    plt.tight_layout()
+    if outDir:
+        if not os.path.isdir(outDir):
+            os.mkdir(outDir)
+    outPath = os.path.join(outDir, plotName)
+    fig.savefig(outPath)
+
+def plot_training_loss_from_csv(csvPath, plotName="training_loss_plot.pdf", outDir=None, valid=True, logY=True):
+    history = np.genfromtxt(csvPath, delimiter=",", names=True)
+    
+    fig = plt.figure(figsize=(8, 6))
+    epochs = history["epoch"] + 1
+    plt.plot(epochs, history['loss'], label='loss')
+    if valid:
+        plt.plot(epochs, history['val_loss'], label = 'val_loss')
+        
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    if logY:
+        plt.yscale("log")
     plt.legend(loc='best')
     
     plt.tight_layout()
@@ -147,15 +169,35 @@ def plot_reconstruction_error(error_list, label_list, plotName="mean_reconstruct
     outPath = os.path.join(outDir, plotName)
     fig.savefig(outPath)
 
-def plot_mass_vs_reco_err(reco_err, avg_jet_mass, plotName="jet_mass_vs_reco_err.pdf", outDir=None):
+def plot_mass_vs_reco_err(reco_err, avg_jet_mass, std_jet_mass=None, plotName="jet_mass_vs_reco_err.pdf", outDir=None):
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(1, 1, 1)
 
-    plt.plot(reco_err * 1e6, avg_jet_mass)
-    # plt.hist(avg_jet_mass, bins="auto")
+    ax.errorbar(reco_err * 1e6, avg_jet_mass, yerr=std_jet_mass)
+    ax.plot(reco_err * 1e6, avg_jet_mass)
 
     ax.set_xlabel(r"Reconstruction error x $10^6$")
     ax.set_ylabel("Average jet mass [GeV]")
+    ax.set_ylim([0, 200])
+    
+    plt.tight_layout()
+    if outDir:
+        if not os.path.isdir(outDir):
+            os.mkdir(outDir)
+    outPath = os.path.join(outDir, plotName)
+    fig.savefig(outPath)
+
+def plot_mass_at_wp(jet_mass_list, wp_list, bins=15, plotName="jet_mass_at_wp.pdf", outDir=None):
+    fig = plt.figure(figsize=(8, 6))
+    ax = fig.add_subplot(1, 1, 1)
+    
+    for i in range(len(jet_mass_list)):
+        w = np.ones(len(jet_mass_list[i])) * 1. / len(jet_mass_list[i])
+        ax.hist(jet_mass_list[i], bins=bins, weights=w, histtype="step", label=f"bkg rej {wp_list[i]}")
+    
+    ax.legend(loc="upper right")
+    ax.set_xlabel("Jet mass [GeV]")
+    ax.set_ylabel("Fraction of jets")
     
     plt.tight_layout()
     if outDir:

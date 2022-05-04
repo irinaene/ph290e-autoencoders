@@ -34,11 +34,28 @@ def equalObs(x, nbin):
 
 def jet_mass_vs_reco_error(reco_err, jet_mass, bins=25):
     counts, bin_edges = np.histogram(reco_err, bins=bins)
-    mass, bin_edges = np.histogram(reco_err, weights=jet_mass, bins=bin_edges)
-
-    print(counts)
-
-    avg_jet_mass = mass / counts
     bin_centers = bin_edges[:-1] + np.diff(bin_edges) / 2
+    avg_jet_mass = np.zeros(len(bin_centers))
+    std_jet_mass = np.zeros(len(bin_centers))
     
-    return avg_jet_mass, bin_centers
+    for i in range(len(bin_edges) - 1):
+        inds = np.where((reco_err >= bin_edges[i]) & (reco_err < bin_edges[i + 1]))
+        sel_jets = jet_mass[inds]
+        avg_jet_mass[i] = np.mean(sel_jets)
+        std_jet_mass[i] = np.std(sel_jets, ddof=1) / np.sqrt(np.size(sel_jets))
+    
+    return avg_jet_mass, std_jet_mass, bin_centers
+
+def reco_err_for_wp(reco_err, wp):
+    sorted_reco_err = np.sort(reco_err)
+    n_passing = int(wp * len(reco_err))
+    cut_on_err = sorted_reco_err[::-1][n_passing]
+    return cut_on_err
+
+def jet_mass_at_wp(reco_err, jet_mass, wp_list):
+    outList = []
+    for wp in wp_list:
+        pass_jets = np.where(reco_err > wp)
+        outList.append(jet_mass[pass_jets])
+    
+    return outList
