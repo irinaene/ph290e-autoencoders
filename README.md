@@ -78,4 +78,4 @@ Finally, to generate some plots that evaluate the performance of the autoencoder
 ```bash
 python ph290e-autoencoders/evaluate_autoencoder.py
 ```
-The plots will be stored in the folder `evaluation_plots_dim12`. Some of the generated plots include: autoencoder reconstructed jet images, histograms of the autoencoder mean reconstruction error, ROC curves, 
+The plots will be stored in the folder `evaluation_plots_dim12`. Some of the generated plots include: autoencoder reconstructed jet images, histograms of the autoencoder mean reconstruction error, ROC curves (signal efficiency versus background rejection), average jet mass versuss reconstruction error, jet mass distribution at different autoencoder working points.
