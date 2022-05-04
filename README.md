@@ -48,3 +48,30 @@ python ph290e-autoencoders/plot_inputs.py
 This will generate and store the plots in the folder `input_plots`.
 
 ## Training step
+First you need to activate the training environment:
+```bash
+conda activate ph290e_train
+```
+
+To split the samples into training and testing sets, run the following script:
+```bash
+python ph290e-autoencoders/prepare_training.py
+```
+This will split the background sample into a training set and a validation set and save the files in the folder `training_samples`. The default is to have 100k jets in the test set -- if you want to change this, modify the variable `nTest` inside `prepare_training.py`.
+
+### Optional:
+If you want to run a search for the optimal encoding dimension of the latent representation, take a look at the script `ph290e-autoencoders/find_encoding_dim.py`. This will loop over various options for the encoding dimension and run 5 training runs over a training set of 100k background jets. In the end, it will generate a plot of the loss (averaged over the 5 training runs) versus encoding dimension, from which one can choose the optimal dimension.
+Be warned that this step is very time consuming, so it would ideally be run using a GPU (this means that in the conda enviroment for training one should install the `tensorflow-gpu` package).
+
+To train the autoencoder on the background sample, run the script:
+```bash
+python ph290e-autoencoders/train_autoencoder.py
+```
+Note that by default the script uses `encoding_dim=12` and 100k jets for training + 25k jets for validation. If you want to change this, take a look at the variables defined at the top of the script.
+The trained model and some diagnostic plots will be saved in the folder `trained_models_dim12`.
+
+Finally, to generate some plots that evaluate the performance of the autoencoder model, run:
+```bash
+python ph290e-autoencoders/evaluate_autoencoder.py
+```
+The plots will be stored in the folder `evaluation_plots_dim12`.
