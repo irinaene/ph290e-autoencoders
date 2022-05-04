@@ -59,9 +59,13 @@ python ph290e-autoencoders/prepare_training.py
 ```
 This will split the background sample into a training set and a validation set and save the files in the folder `training_samples`. The default is to have 100k jets in the test set -- if you want to change this, modify the variable `nTest` inside `prepare_training.py`.
 
+---
+
 ### Optional:
 If you want to run a search for the optimal encoding dimension of the latent representation, take a look at the script `ph290e-autoencoders/find_encoding_dim.py`. This will loop over various options for the encoding dimension and run 5 training runs over a training set of 100k background jets. In the end, it will generate a plot of the loss (averaged over the 5 training runs) versus encoding dimension, from which one can choose the optimal dimension.
 Be warned that this step is very time consuming, so it would ideally be run using a GPU (this means that in the conda enviroment for training one should install the `tensorflow-gpu` package).
+
+---
 
 To train the autoencoder on the background sample, run the script:
 ```bash
@@ -74,4 +78,4 @@ Finally, to generate some plots that evaluate the performance of the autoencoder
 ```bash
 python ph290e-autoencoders/evaluate_autoencoder.py
 ```
-The plots will be stored in the folder `evaluation_plots_dim12`.
+The plots will be stored in the folder `evaluation_plots_dim12`. Some of the generated plots include: autoencoder reconstructed jet images, histograms of the autoencoder mean reconstruction error, ROC curves, 
