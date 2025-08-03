@@ -1,10 +1,11 @@
-import ROOT
-import sys
 import os
-import numpy as np
-import h5py
+import sys
 
-import preprocessing_helpers as pph
+import h5py
+import numpy as np
+import ROOT
+
+import helpers.preprocessing_helpers as pph
 
 ROOT.gROOT.SetBatch(True)
 # Load Delphes
