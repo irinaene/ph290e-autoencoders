@@ -1,0 +1,8 @@
+name: ph290e_train
+channels:
+  - conda-forge
+dependencies:
+  - tensorflow-gpu=2.7.0
+  - python=3.10.4
+  - h5py=3.6.0
+  - matplotlib=3.5.1
