@@ -1,5 +1,12 @@
 # Detecting anomalies in hadronic resonances using autoencoders
 
+The goal of this project is to demo how autoencoders can be used to perform anomaly detection in a more (physics-)model independent way.
+The main idea is that autoencoders can learn what "normal" events look like and how to reconstruct them (by mapping the input onto a latent representation and then back to itself).
+This implies that when the autoencoder sees an "anomalous" event, it should fail to reconstruct it properly.
+
+As a practical example, an autoencoder (using a convolutional neural network architecture) is trained to reconstruct QCD jets and evaluated on how poorly it reconstructs jets from top quark decays.
+For more details, you can check out these [slides](assets/050422-ph290e_iene.pdf).
+
 # Running the code
 
 Get a copy of the code:
