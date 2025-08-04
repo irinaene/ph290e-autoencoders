@@ -1,0 +1,10 @@
+name: ph290e_preproc
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10.4
+  - scipy=1.8.0
+  - numpy=1.24.0
+  - h5py=3.6.0
+  - matplotlib=3.5.1
+  - scikit-learn=1.0.2
