@@ -1,9 +1,11 @@
+import os
+
 import h5py
 import numpy as np
-import os
-import training_helpers as trh
-import evaluation_helpers as evalh
-import plotting_helpers as ploth
+
+import helpers.evaluation_helpers as evalh
+import helpers.plotting_helpers as ploth
+import helpers.training_helpers as trh
 
 nPix = 40
 sampleDir = "training_samples"

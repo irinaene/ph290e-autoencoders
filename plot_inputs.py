@@ -1,7 +1,8 @@
 import h5py
-import plotting_helpers as ploth
-import evaluation_helpers as evalh
 import numpy as np
+
+import helpers.evaluation_helpers as evalh
+import helpers.plotting_helpers as ploth
 
 # where to save the input plots
 plotDir = "input_plots"

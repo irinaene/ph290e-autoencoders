@@ -1,9 +1,11 @@
-import h5py
 import os
-import tensorflow as tf
+
+import h5py
 import numpy as np
-import training_helpers as trh
-import plotting_helpers as ploth
+import tensorflow as tf
+
+import helpers.plotting_helpers as ploth
+import helpers.training_helpers as trh
 
 nPix = 40
 sampleDir = "training_samples"

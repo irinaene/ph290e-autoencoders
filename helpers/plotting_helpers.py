@@ -1,10 +1,11 @@
 """Plotting helper functions."""
 
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 import os
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 mpl.rcParams["xtick.top"] = True
 mpl.rcParams["ytick.right"] = True

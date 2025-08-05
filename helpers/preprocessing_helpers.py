@@ -1,9 +1,11 @@
 """Preprocessing helper functions."""
 
+import sys
+
+import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import griddata
-import matplotlib.pyplot as plt
-import sys
+
 
 def center(x, y, w):
     centroid_x = np.average(x, weights=w)

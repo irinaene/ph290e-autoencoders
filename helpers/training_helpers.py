@@ -2,12 +2,14 @@
 
 import os
 
-from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape, UpSampling2D, Activation
+from tensorflow import keras
 from tensorflow.keras import Model
+from tensorflow.keras.callbacks import (CSVLogger, EarlyStopping,
+                                        ModelCheckpoint)
+from tensorflow.keras.layers import (Activation, Conv2D, Dense, Flatten, Input,
+                                     MaxPooling2D, Reshape, UpSampling2D)
 from tensorflow.keras.losses import mean_squared_error
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, CSVLogger
-from tensorflow import keras
 
 
 def create_autoencoder_model(img_shape, encoding_dim=6):

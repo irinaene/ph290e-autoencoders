@@ -2,6 +2,7 @@
 
 import numpy as np
 
+
 def roc_curve(sig_arr, bkg_arr, thresholds, cut_type="greater"):
     n_sig = len(sig_arr)
     n_bkg = len(bkg_arr)
